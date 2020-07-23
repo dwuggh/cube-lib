@@ -1,0 +1,31 @@
+{
+  "name": "puzzling-lib",
+  "version": "0.1.0",
+  "description": "three.js lib for cubes using typescript",
+  "author": "dwuggh",
+  "main": "build/index.js",
+  "module": "build/index.es.js",
+  "license": "GPLv3",
+  "private": false,
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "eslint . --ext .js, .ts"
+  },
+  "files": [
+    "build"
+  ],
+  "devDependencies": {
+    "@types/jest": "^26.0.5",
+    "@typescript-eslint/eslint-plugin": "^3.7.0",
+    "@typescript-eslint/parser": "^3.7.0",
+    "eslint": "^7.5.0",
+    "jest": "^26.1.0",
+    "rollup": "^2.22.2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.3",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "ts-jest": "^26.1.3",
+    "typescript": "^3.9.7"
+  }
+}
