@@ -25,16 +25,17 @@ export interface Order {
 }
 
 /*
-  status store informations of the cube for the performing order.
+  RotationProgress store informations of the cube for the performing order.
   Only used when performing an order.
  */
-export interface Status<T extends BaseCubelet> {
+export interface RotationProgress<T extends BaseCubelet> {
   order: Order,
   // in most case, a rotation of a cube is focused on one axis.
   // This may change due to some weird cubes.
   axis: THREE.Vector3,
   // how much work left to do. This value may not be percise, could have errors of 1E-10 and above.
   remainAngle: number,
-  // the roation group. normally, the roation is an operation of groups. however, use Three.Group is unnecessary.
+  // the roation group. normally, the roation is an operation of groups.
+  // TODO Three.Group?
   group: Array<T>
 }

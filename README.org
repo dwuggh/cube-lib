@@ -42,6 +42,8 @@
 
       // initialize a cube
       var cube = new Cubelib.Hexahedron(Cubelib.HexahedronSVGCubelet, 4);
+      // if you are using typescript:
+      // var cube = new Cubelib.Hexahedron<Cubelib.HexahedronSVGCubelet>(Cubelib.HexahedronSVGCubelet, 4);
       cube.rotation.y -= 0.5
       cube.rotation.x += 0.5
       cube.scale.setScalar(0.7)

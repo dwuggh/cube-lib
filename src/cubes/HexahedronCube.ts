@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Order, Status } from '../utils'
+import { Order, RotationProgress } from '../utils'
 import { HexahedronBaseCubelet } from './Cubelets/HexahedronBaseCubelet'
 import { BaseCube } from './BaseCube'
 
@@ -15,7 +15,7 @@ const axisZ = new THREE.Vector3(0, 0, 1)
   Scrambling and solving should handled by other program, as well parsing the order.
   The only algorithm-related method is the restore() method.
  */
-export class Hexahedron<T extends HexahedronBaseCubelet> extends BaseCube<T> {
+export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T> {
   // the layer of this hexahedron cube. Could be any positive integer.
   layer: number
 
@@ -34,19 +34,19 @@ export class Hexahedron<T extends HexahedronBaseCubelet> extends BaseCube<T> {
     }
   }
 
-  protected _perform(): Status<T> {
+  protected _perform(): RotationProgress<T> {
     // control rotation speed, faster when there are too many orders
     const anglePerFrame = this.orders.length >= 1 ? 1.0 : 0.38
-    if (Math.abs(this._progress.remainAngle) < anglePerFrame) {
+    if (Math.abs(this._rotationProgress.remainAngle) < anglePerFrame) {
       // in case the remaining angle is too small
-      this._rotate(this._progress.group, this._progress.axis, this._progress.remainAngle)
+      this._rotate(this._rotationProgress.group, this._rotationProgress.axis, this._rotationProgress.remainAngle)
       // when finished, set current status to undefined (or null, whatever)
-      this._progress = undefined
+      this._rotationProgress = null
     } else {
-      this._rotate(this._progress.group, this._progress.axis, anglePerFrame)
-      this._progress.remainAngle -= anglePerFrame
+      this._rotate(this._rotationProgress.group, this._rotationProgress.axis, anglePerFrame)
+      this._rotationProgress.remainAngle -= anglePerFrame
     }
-    return this._progress
+    return this._rotationProgress
   }
 
   // rotate elements in array
@@ -56,7 +56,7 @@ export class Hexahedron<T extends HexahedronBaseCubelet> extends BaseCube<T> {
     }
   }
 
-  protected _setupRotationStatus(order: Order): Status<T> {
+  protected _setupRotationStatus(order: Order): RotationProgress<T> {
 
     const rotationGroup = new Array<T>()
     let axis: THREE.Vector3
@@ -112,12 +112,12 @@ export class Hexahedron<T extends HexahedronBaseCubelet> extends BaseCube<T> {
       default:
         throw new Error('ERROR: unknown order.face')
     }
-    this._progress = {
+    this._rotationProgress = {
       order: order,
       axis: axis,
       remainAngle: order.angle,
       group: rotationGroup,
     }
-    return this._progress
+    return this._rotationProgress
   }
 }

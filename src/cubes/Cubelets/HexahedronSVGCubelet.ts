@@ -22,7 +22,7 @@ const loader = new THREE.TextureLoader()
 export class HexahedronSVGCubelet extends HexahedronBaseCubelet {
 
   constructor(coordinates: number[]) {
-    
+
     const materials = [
       new THREE.MeshBasicMaterial(),
       new THREE.MeshBasicMaterial(),

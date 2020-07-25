@@ -5,7 +5,7 @@ import external from 'rollup-plugin-peer-deps-external'
 import resolve from '@rollup/plugin-node-resolve'
 // import resolve from 'rollup-plugin-node-resolve'
 import image from '@rollup/plugin-image'
-import url from '@rollup/plugin-url'
+// import url from '@rollup/plugin-url'
 import pkg from './package.json'
 
 export default {
@@ -14,14 +14,8 @@ export default {
     {
       file: pkg.main,
       format: 'umd',
-      name: 'PUZZLING',
+      name: 'Cubelib',
       indent: '\t',
-      exports: 'named',
-      sourcemap: true
-    },
-    {
-      file: pkg.module,
-      format: 'es',
       exports: 'named',
       sourcemap: true
     }

@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Order, Status } from '../utils'
+import { Order, RotationProgress } from '../utils'
 import { BaseCubelet } from './Cubelets/BaseCubelet'
 
 export abstract class BaseCube<T extends BaseCubelet> extends THREE.Group {
@@ -9,8 +9,8 @@ export abstract class BaseCube<T extends BaseCubelet> extends THREE.Group {
   // orders: Collections.Queue<Order> = new Collections.Queue<Order>()
   orders: Array<Order> = new Array<Order>()
 
-  // store status when rotating. Should be undefined otherwise.
-  protected _progress: Status<T>
+  // store rotationProgress when rotating. Should be null otherwise.
+  protected _rotationProgress: RotationProgress<T>
 
   //overwrite threejs's children to avoid type error
   children: Array<T>
@@ -40,7 +40,7 @@ export abstract class BaseCube<T extends BaseCubelet> extends THREE.Group {
     This method should be called inside animation loop.
   */
   public update(): void {
-    if (this._progress) {
+    if (this._rotationProgress) {
       this._perform()
     } else {
       if (this.orders.length == 0) {
@@ -57,14 +57,14 @@ export abstract class BaseCube<T extends BaseCubelet> extends THREE.Group {
     Perform an order by updating one frame.
     only used when this._status is not null.
   */
-  protected abstract _perform(): Status<T>
+  protected abstract _perform(): RotationProgress<T>
   /*
     Mainly set up for rotation group.
     Use the cubelet's positionFilter function to do the job, since it would not affected by group scaling.
     Axes must be cloned, or the origin value may be changed.
     Still, I need to specify six faces and handle them respectively. This should be the only repeat job.
   */
-  protected abstract _setupRotationStatus(order: Order): Status<T>
+  protected abstract _setupRotationStatus(order: Order): RotationProgress<T>
 
 
 }
