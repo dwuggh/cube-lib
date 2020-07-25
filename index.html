@@ -32,12 +32,11 @@
      /* scene.add(new THREE.AxesHelper(10)); */
 
 
-     var cube = new PUZZLING.Hexahedron(4, PUZZLING.HexahedronSVGCubelet);
-     var group = cube.groupT;
-     group.rotation.y -= 0.5
-     group.rotation.x += 0.5
-     group.scale.setScalar(0.7)
-     scene.add(group);
+     var cube = new PUZZLING.Hexahedron(PUZZLING.HexahedronSVGCubelet, 4);
+     cube.rotation.y -= 0.5
+     cube.rotation.x += 0.5
+     cube.scale.setScalar(0.7)
+     scene.add(cube);
      var animate = function () {
 			 requestAnimationFrame( animate );
 

@@ -41,16 +41,18 @@
 
 
       // initialize a cube
-      var cube = new Cubelib.Hexahedron(4, Cubelib.HexahedronSVGCubelet);
-      var group = cube.groupT;
-      scene.add(group);
+      var cube = new Cubelib.Hexahedron(Cubelib.HexahedronSVGCubelet, 4);
+      cube.rotation.y -= 0.5
+      cube.rotation.x += 0.5
+      cube.scale.setScalar(0.7)
+      scene.add(cube);
       var animate = function () {
         requestAnimationFrame( animate );
 
         // add some rotations
-        group.rotation.x += 0.03
-        group.rotation.y -= 0.03
-        group.rotation.z -= 0.03
+        cube.rotation.x += 0.03
+        cube.rotation.y -= 0.03
+        cube.rotation.z -= 0.03
 
         // remember to update
         cube.update()
