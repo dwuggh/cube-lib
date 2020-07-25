@@ -7,24 +7,65 @@
 		 body { margin: 0; }
 		 canvas { display: block; }
 		</style>
-    <script src="node_modules/typescript-collections/dist/lib/umd.min.js"></script>
-		<script src="node_modules/three/build/three.js"></script>
-		<script src="build/puzzling-lib.js"></script>
+    <!-- <script src="node_modules/typescript-collections/dist/lib/umd.min.js"></script> -->
 		<!-- <script src="build/puzzling.iife.js"></script> -->
     <!-- <srcipt type="module">
          import * as THREE from "./node_modules/three/build/three.js"
          </srcipt> -->
 	</head>
 	<body>
+		<script src="node_modules/three/build/three.js"></script>
+		<script src="build/puzzling-lib.js"></script>
 		<script>
      var scene = new THREE.Scene();
      var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-     var renderer = new THREE.WebGLRenderer();
+     var renderer = new THREE.WebGLRenderer(
+       { antialias: true }
+     );
      renderer.setSize( window.innerWidth, window.innerHeight );
+     var canvas = renderer.domElement;
      document.body.appendChild( renderer.domElement );
-     var cube = new PUZZLING.Hexahedron(3);
-     scene.add(cube);
+
+     scene.background = new THREE.Color(0xfeffa8);
+     camera.position.set(0, 0, 5);
+     /* scene.add(new THREE.AxesHelper(10)); */
+
+
+     var cube = new PUZZLING.Hexahedron(3, PUZZLING.HexahedronSVGCubelet);
+     var group = cube.groupT;
+     group.rotation.y -= 0.5
+     group.rotation.x += 0.5
+     group.scale.setScalar(0.7)
+     scene.add(group);
+     var animate = function () {
+			 requestAnimationFrame( animate );
+
+       /* group.rotation.x += 0.03
+        * group.rotation.y -= 0.03
+        * group.rotation.z -= 0.03 */
+       cube.update()
+			 renderer.render( scene, camera );
+		 };
+     var order1 = {
+       face: 'R',
+       height: 2,
+       angle: Math.PI / 2
+     }
+
+     var order2 = {
+       face: 'F',
+       height: 1,
+       angle: Math.PI
+     }
+
+     var order3 = {
+       face: 'R',
+       height: 1,
+       angle: Math.PI / 2
+     }
+
+		 animate();
 		</script>
 	</body>
 </html>
