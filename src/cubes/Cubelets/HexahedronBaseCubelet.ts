@@ -3,7 +3,7 @@ import { BaseCubelet } from './BaseCubelet'
 
 
 /*
-  A simple hexahedron cubelet.
+  A simple hexahedron cubelet base class.
  */
 export class HexahedronBaseCubelet extends BaseCubelet {
   // i, j, k and layer indicate coordinates
@@ -28,7 +28,7 @@ export class HexahedronBaseCubelet extends BaseCubelet {
   }
 
   public setInitialPosition(): void {
-    const center = Math.floor(this.layer / 2)                  // center position
+    const center = ( this.layer - 1 ) / 2                  // center position
     this.position.set(
       this.i - center,
       this.j - center,
