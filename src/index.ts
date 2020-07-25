@@ -1,1 +1,4 @@
-export const sum = (a: number, b: number): number => a + b
+export { Hexahedron } from './cubes/Hexahedron'
+
+export { HexahedronSVGCubelet } from './cubes/Cubelets/HexahedronSVGCubelet'
+

@@ -1,19 +1,12 @@
 import * as THREE from 'three'
 
-import * as BLUE from './assets/cubes/blue.png'
-import * as GREEN from './assets/cubes/green.png'
-import * as ORANGE from './assets/cubes/orange.png'
-import * as RED from './assets/cubes/red.png'
-import * as WHITE from './assets/cubes/white.png'
-import * as YELLOW from './assets/cubes/yellow.png'
-
-const stickers = [
-  BLUE,
-  GREEN,
-  ORANGE,
-  RED,
-  WHITE,
-  YELLOW
+const colors = [
+  new THREE.Color('red'),
+  new THREE.Color('orange'),
+  new THREE.Color('white'),
+  new THREE.Color('yellow'),
+  new THREE.Color('green'),
+  new THREE.Color('skyblue'),
 ]
 /*
   A simple hexahedron cubelet.
@@ -43,42 +36,42 @@ export class Cubelet extends THREE.Mesh {
         opacity: 0,
         transparent: false,
         side: THREE.DoubleSide,
+        // color: new THREE.Color(0x45f1f1)
       })
     })
+
+    switch(i) {
+      case 0:
+        Cubelet.setColor(materials, 1, 1)
+        break
+      case layer - 1:
+        Cubelet.setColor(materials, 0, 0)
+        break
+    }
+
+    switch(j) {
+      case 0:
+        Cubelet.setColor(materials, 3, 3)
+        break
+      case layer - 1:
+        Cubelet.setColor(materials, 2, 2)
+        break
+    }
+
+    switch(k) {
+      case 0:
+        Cubelet.setColor(materials, 5, 5)
+        break
+      case layer - 1:
+        Cubelet.setColor(materials, 4, 4)
+        break
+    }
 
     super(new THREE.BoxGeometry, materials)
     this.i = i
     this.j = j
     this.k = k
     this.center = Math.floor(layer / 2)                      // center position
-
-    // setting stickers according to coordinate
-    switch(i) {
-      case 0:
-        this.setSticker(0, 0)
-        break
-      case layer:
-        this.setSticker(1, 1)
-        break
-    }
-
-    switch(j) {
-      case 0:
-        this.setSticker(2, 2)
-        break
-      case layer:
-        this.setSticker(3, 3)
-        break
-    }
-
-    switch(k) {
-      case 0:
-        this.setSticker(4, 4)
-        break
-      case layer:
-        this.setSticker(5, 5)
-        break
-    }
 
 
     // setting properties
@@ -90,11 +83,21 @@ export class Cubelet extends THREE.Mesh {
   }
 
   public setSticker(sticker: number, face: number): void {
+    // console.log(stickers[sticker])
     const setting = {
       transparent: false,
-      map: new THREE.TextureLoader().load(stickers[sticker])
+      color: colors[sticker]
+      // map: new THREE.TextureLoader().load('./assets/cubes/blue.png')
     }
     this.material[face].setValues(setting)
+  }
+
+  public static setColor(materials: Array<THREE.Material>, color: number, face: number): void {
+    const setting = {
+      transparent: false,
+      color: colors[color],
+    }
+    materials[face].setValues(setting)
   }
 
   public setInitialPosition(): void {
