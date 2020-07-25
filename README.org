@@ -1,0 +1,83 @@
+* cube-lib
+  Rubik's cube library using three.js and typescript
+
+** install
+** usage
+*** quick try
+    - clone this repo, and set up deps:
+    #+BEGIN_SRC bash
+      git clone https://github.com/dwuggh/cube-lib.git
+      yarn
+      yarn run build
+      yarn run start
+    #+END_SRC
+    - open http://127.0.0.1:8000 in your browser.
+*** use in browser or as modules
+    This project uses umd. So in html:
+    #+BEGIN_SRC html
+      <script src="node_modules/three/build/three.js"></script>
+      <script src="node_modules/cube-lib/build/cube-lib.js"></script>
+    #+END_SRC
+    and in node.js:
+    #+BEGIN_SRC javascript
+
+      import * as THREE from 'three'
+      import * as Cubelib from 'cube-lib'
+
+      // set up scenes
+
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+      var renderer = new THREE.WebGLRenderer(
+        { antialias: true }
+      );
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      var canvas = renderer.domElement;
+      document.body.appendChild( renderer.domElement );
+
+      scene.background = new THREE.Color(0xfeffa8);
+      camera.position.set(0, 0, 5);
+
+
+      // initialize a cube
+      var cube = new Cubelib.Hexahedron(4, Cubelib.HexahedronSVGCubelet);
+      var group = cube.groupT;
+      scene.add(group);
+      var animate = function () {
+        requestAnimationFrame( animate );
+
+        // add some rotations
+        group.rotation.x += 0.03
+        group.rotation.y -= 0.03
+        group.rotation.z -= 0.03
+
+        // remember to update
+        cube.update()
+
+        renderer.render( scene, camera );
+      };
+
+      animate();
+
+      // prepare some orders
+      var order1 = {
+        face: 'R',
+        height: 2,
+        angle: Math.PI / 2
+      }
+
+      var order2 = {
+        face: 'F',
+        height: 1,
+        angle: Math.PI
+      }
+
+      var order3 = {
+        face: 'R',
+        height: 1,
+        angle: Math.PI / 2
+      }
+
+      // add the orders with cube.enqueue(order)
+    #+END_SRC
