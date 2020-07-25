@@ -50727,4 +50727,4 @@ class HexahedronSVGCubelet extends HexahedronBaseCubelet {
 }
 
 export { Hexahedron, HexahedronSVGCubelet };
-//# sourceMappingURL=puzzling-lib.module.js.map
+//# sourceMappingURL=cube-lib.module.js.map

@@ -1,10 +1,10 @@
 {
-  "name": "puzzling-lib",
+  "name": "cube-lib",
   "version": "0.1.0",
-  "description": "three.js lib for cubes using typescript",
+  "description": "Rubik's cube library using three.js and typescript",
   "author": "dwuggh",
-  "main": "build/puzzling-lib.js",
-  "module": "build/puzzling-lib.module.js",
+  "main": "build/cube-lib.js",
+  "module": "build/cube-lib.module.js",
   "license": "GPL",
   "private": false,
   "scripts": {
