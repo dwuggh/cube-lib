@@ -3,11 +3,11 @@ import * as Mocha from 'mocha'
 import { expect } from 'chai'
 
 import { parser } from '../src/parser/parser'
-import { Order } from '../src/utils'
+import { Move } from '../src/utils'
 
 
 
-function orderBuilder(face: string, height = 1, angle = 1): Order {
+function orderBuilder(face: string, height = 1, angle = 1): Move {
   return {
     face: face,
     height: height,

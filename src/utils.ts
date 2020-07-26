@@ -1,10 +1,10 @@
 import { BaseCubelet } from "./cubes/Cubelets/BaseCubelet"
 
 /*
-  Order describes how a cube should rotate in the next few frames.
-  The parser should parse the input streams into a Order stream.
+  Move describes how a cube should rotate in the next few frames.
+  The parser should parse the input streams into a Move stream.
  */
-export interface Order {
+export interface Move {
   /*
     the rotation face.
     positive/negative or in angle?
@@ -32,7 +32,7 @@ export interface Order {
   Only used when performing an order.
  */
 export interface RotationProgress<T extends BaseCubelet> {
-  order: Order,
+  move: Move,
   // in most case, a rotation of a cube is focused on one axis.
   // This may change due to some weird cubes.
   axis: THREE.Vector3,

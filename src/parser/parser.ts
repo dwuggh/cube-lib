@@ -1,4 +1,4 @@
-import { Order } from '../utils'
+import { Move } from '../utils'
 
 export { parser }
 
@@ -55,12 +55,12 @@ function hexahedronParser(input: string, layer: number) {
   }
 }
 
-function parser(input: string, layer: number, orders?: Array<Order>): Array<Order> {
-  if (orders == undefined) orders = new Array<Order>()
+function parser(input: string, layer: number, moves?: Array<Move>): Array<Move> {
+  if (moves == undefined) moves = new Array<Move>()
   const result = hexahedronParser(input, layer)
-  orders.push(result.order)
-  if (result.input == '') return orders
-  return parser(result.input, layer, orders)
+  moves.push(result.order)
+  if (result.input == '') return moves
+  return parser(result.input, layer, moves)
 }
 
 function parseAngle(angle: string): number {

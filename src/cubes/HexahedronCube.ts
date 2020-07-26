@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Order, RotationProgress } from '../utils'
+import { Move, RotationProgress } from '../utils'
 import { HexahedronBaseCubelet } from './Cubelets/HexahedronBaseCubelet'
 import { BaseCube } from './BaseCube'
 
@@ -36,7 +36,7 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
 
   protected _perform(): RotationProgress<T> {
     // control rotation speed, faster when there are too many orders
-    const anglePerFrame = this.orders.length >= 1 ? 1.0 : 0.38
+    const anglePerFrame = this.moves.length >= 1 ? 1.0 : 0.38
     if (Math.abs(this._rotationProgress.remainAngle) < anglePerFrame) {
       // in case the remaining angle is too small
       this._rotate(this._rotationProgress.group, this._rotationProgress.axis, this._rotationProgress.remainAngle)
@@ -56,15 +56,15 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
     }
   }
 
-  protected _setupRotationStatus(order: Order): RotationProgress<T> {
+  protected _setupRotationStatus(move: Move): RotationProgress<T> {
 
     const rotationGroup = new Array<T>()
     let axis: THREE.Vector3
-    switch (order.face) {
+    switch (move.face) {
       case 'R':
         axis = axisX.clone().negate()
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(0, this.layer - order.height, this.layer)) {
+          if (cubelet.positionFilter(0, this.layer - move.height, this.layer)) {
             rotationGroup.push(cubelet)
           }
         }
@@ -72,7 +72,7 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
       case 'L':
         axis = axisX
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(0, 0, order.height)) {
+          if (cubelet.positionFilter(0, 0, move.height)) {
             rotationGroup.push(cubelet)
           }
         }
@@ -80,7 +80,7 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
       case 'U':
         axis = axisY.clone().negate()
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(1, this.layer - order.height, this.layer)) {
+          if (cubelet.positionFilter(1, this.layer - move.height, this.layer)) {
             rotationGroup.push(cubelet)
           }
         }
@@ -88,7 +88,7 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
       case 'D':
         axis = axisY
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(1, 0, order.height)) {
+          if (cubelet.positionFilter(1, 0, move.height)) {
             rotationGroup.push(cubelet)
           }
         }
@@ -96,7 +96,7 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
       case 'F':
         axis = axisZ.clone().negate()
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(2, this.layer - order.height, this.layer)) {
+          if (cubelet.positionFilter(2, this.layer - move.height, this.layer)) {
             rotationGroup.push(cubelet)
           }
         }
@@ -104,18 +104,18 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
       case 'B':
         axis = axisZ
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(2, 0, order.height)) {
+          if (cubelet.positionFilter(2, 0, move.height)) {
             rotationGroup.push(cubelet)
           }
         }
         break
       default:
-        throw new Error('ERROR: unknown order.face')
+        throw new Error('ERROR: unknown move.face')
     }
     this._rotationProgress = {
-      order: order,
+      move: move,
       axis: axis,
-      remainAngle: order.angle,
+      remainAngle: move.angle,
       group: rotationGroup,
     }
     return this._rotationProgress
