@@ -12,6 +12,7 @@ export class HexahedronBaseCubelet extends BaseCubelet {
   j: number
   k: number
   // center position
+  center : number
   layer: number
 
   constructor(geometry: THREE.Geometry | THREE.BufferGeometry, materials: THREE.Material | THREE.Material[], coordinate: number[]) {
@@ -20,6 +21,7 @@ export class HexahedronBaseCubelet extends BaseCubelet {
     this.j = coordinate[1]
     this.k = coordinate[2]
     this.layer = coordinate[3]
+    this.center = (this.layer - 1) / 2
 
     // setting properties
     this.name = `${this.i}+${this.j}+${this.k}`
@@ -28,11 +30,10 @@ export class HexahedronBaseCubelet extends BaseCubelet {
   }
 
   public setInitialPosition(): void {
-    const center = ( this.layer - 1 ) / 2                  // center position
     this.position.set(
-      this.i - center,
-      this.j - center,
-      this.k - center
+      this.i - this.center,
+      this.j - this.center,
+      this.k - this.center
     )
     this.rotation.set(0, 0, 0)
   }
@@ -48,6 +49,11 @@ export class HexahedronBaseCubelet extends BaseCubelet {
   }
 
   public round(): THREE.Vector3 {
-    return this.position.round()
+    this.position.copy(
+      this.position.clone().addScalar(this.center).
+        round().
+        addScalar(- this.center)
+    )
+    return this.position
   }
 }

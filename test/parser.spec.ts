@@ -26,6 +26,19 @@ Mocha.describe('simple cube parser',
                    ]
                    expect(result).to.deep.equal(supposedResult)
                  })
+                 it("handle 'w' and heights correctly", () => {
+                   const input = "L' Dw2 Lw 3Fw2 D 3Rw2"
+                   const result = parser(input, 6)
+                   const supposedResult = [
+                     moveBuilder('L', 1, -1),
+                     moveBuilder('D', 2, 2),
+                     moveBuilder('L', 2, 1),
+                     moveBuilder('F', 3, 2),
+                     moveBuilder('D', 1, 1),
+                     moveBuilder('R', 3, 2),
+                   ]
+                   expect(result).to.deep.equal(supposedResult)
+                 })
                  it('throw an error when height is too large', () => {
                    expect(parser.bind(parser, 'L 123U', 6)).
                      to.throw(

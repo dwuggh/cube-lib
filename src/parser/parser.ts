@@ -12,7 +12,7 @@ function hexahedronParser(input: string, layer: number) {
   const _input = input.substr(regexResult[0].length)
 
   // Rw or R?
-  let height = regexResult[3] == '' ? 1 : layer - 1
+  let height = regexResult[3] == '' ? 1 : 2
   height = regexResult[1] == '' ? height :
     parseInt(regexResult[1]) == 1 ? height : parseInt(regexResult[1])
   if (height > layer)
@@ -21,7 +21,7 @@ function hexahedronParser(input: string, layer: number) {
   /*
     how to parse height:
     1. if has a 'w' right after the face(e.g. Rw, Mw, rw, in the latter 2 case this step wouldn't matter),
-       then set height = layer - 1
+       then set height = 2
     2. if has number precedes the face, ignore 1 and set height to this number
     3. if the face is MES or mes, ignore all above and set height to layer - 2.
    */
