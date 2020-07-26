@@ -7,53 +7,71 @@
 		 body { margin: 0; }
 		 canvas { display: block; }
 		</style>
-    <!-- <script src="node_modules/typescript-collections/dist/lib/umd.min.js"></script> -->
-		<!-- <script src="build/puzzling.iife.js"></script> -->
-    <!-- <srcipt type="module">
-         import * as THREE from "./node_modules/three/build/three.js"
-         </srcipt> -->
 	</head>
 	<body>
 		<script src="node_modules/three/build/three.js"></script>
 		<script src="build/cube-lib.js"></script>
 		<script>
-     var scene = new THREE.Scene();
-     var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-     var renderer = new THREE.WebGLRenderer(
-       { antialias: true }
-     );
-     renderer.setSize( window.innerWidth, window.innerHeight );
-     var canvas = renderer.domElement;
-     document.body.appendChild( renderer.domElement );
+      // let's roll!
 
-     scene.background = new THREE.Color(0xfeffa8);
-     camera.position.set(0, 0, 5);
-     /* scene.add(new THREE.AxesHelper(10)); */
+      // set up scenes
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+      var renderer = new THREE.WebGLRenderer(
+        { antialias: true }
+      );
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      var canvas = renderer.domElement;
+      document.body.appendChild( renderer.domElement );
+      scene.background = new THREE.Color(0xfeffa8);
+      camera.position.set(0, 0, 5);
 
 
-     const input = "RUR'U' R'FR2U'R'U'RUR'F'"
-     const scramble = "F2 D' U R' F' U2 B2 F' U2 R2 D U L2 R2 B2 F2 L R2 U' F L2 B' F2 D' R'"
-     const scramble2 = "3Fw L 3Fw L' Uw F' Lw Fw L2 R B' 3Fw' 3Rw2 3Fw Dw2 Rw' R' B L2 D2 3Fw' R F' Rw2 F D L' F Uw2 Lw' B U2 Dw2 3Rw D2 3Rw2 Rw Lw' F' 3Fw2 3Uw Rw2 R' U F 3Uw' Rw U' Lw2 D2 Bw2 Lw' Bw2 R' U Lw' 3Rw' F2 Rw Bw' L Bw2 L Fw2 F R2 B2 D2 Lw' Fw 3Fw' D Lw' 3Uw Fw' 3Fw' F' U2 3Uw Dw"
-     const moves = Cubelib.parser(scramble2, 6)
-     
-     var cube = new Cubelib.HexahedronCube(Cubelib.Cubelet.HexahedronSVGCubelet, 6);
-     /* cube.enqueue(tperm) */
-     cube.rotation.y -= 0.5
-     cube.rotation.x += 0.5
-     cube.scale.setScalar(0.7)
-     scene.add(cube);
-     var animate = function () {
-			 requestAnimationFrame( animate );
+      // initialize a cube
+      const cube = new Cubelib.Hexahedron(Cubelib.HexahedronSVGCubelet, 4);
+      cube.rotation.y -= 0.5
+      cube.rotation.x += 0.5
+      cube.scale.setScalar(0.7)
+      scene.add(cube);
 
-       /* group.rotation.x += 0.03
-        * group.rotation.y -= 0.03
-        * group.rotation.z -= 0.03 */
-       cube.update()
-			 renderer.render( scene, camera );
-		 };
+      var animate = function () {
+        requestAnimationFrame( animate );
 
-		 animate();
+        // in case you want to add some rotations
+        // cube.rotation.x += 0.03
+        // cube.rotation.y -= 0.03
+        // cube.rotation.z -= 0.03
+
+        // remember to call update inside the loop
+        cube.update()
+
+        renderer.render( scene, camera );
+      };
+
+      animate();
+
+      // use moveBuilder to create moves
+      const R = Cubelib.moveBuilder('R')
+      const U = Cubelib.moveBuilder('U')
+
+      // adjust angles
+      const R2 = Cubelib.moveBuilder('R', 1, 2)
+
+      // double layer rotation
+      const r = Cubelib.moveBuilder('U', 2)
+
+      // middle layer rotation on a 4x4x4 cube
+      const M = Cubelib.moveBuilder('U', 2, 1, 1)
+
+      // you can also use Cubelib.parser
+      // perform a PLL
+      const T_perm = "RUR'U' R'FR2U'R'U'RUR'F'"
+      const moves = Cubelib.parser(T_perm, 4)
+
+      // finally, use cube.enqueue to perfrom them
+      cube.enqueue(R)
+      cube.enqueue(moves)
 		</script>
 	</body>
 </html>
