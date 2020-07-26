@@ -120,4 +120,19 @@ Mocha.describe('simple cube parser',
                    ]
                    expect(result).to.deep.equal(supposedResult)
                  })
+                 it('handle MR, SF... correctly', () => {
+                   const input = "MR 4SF'ED2"
+                   const result = parser(input, 6)
+                   const supposedResult = [
+                     moveBuilder('R', 1, 1, 2),
+                     moveBuilder('F', 4, -1, 2),
+                     moveBuilder('D', 1, 2, 2),
+                   ]
+                   expect(result).to.deep.equal(supposedResult)
+                 })
+                 it('throw error of MR, SF... when height too large', () => {
+                   expect(parser.bind(parser, "MR 6SF'ED2", 6)).to.throw(
+                     "Height too large: 8 is larger than layer 6 at 6SF'ED2"
+                   )
+                 })
                })
