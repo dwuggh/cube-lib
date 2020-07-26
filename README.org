@@ -23,36 +23,40 @@
 
       import * as THREE from 'three'
       import * as Cubelib from 'cube-lib'
+      
+
+
+      // let's roll!
 
       // set up scenes
-
       var scene = new THREE.Scene();
       var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
       var renderer = new THREE.WebGLRenderer(
         { antialias: true }
       );
       renderer.setSize( window.innerWidth, window.innerHeight );
       var canvas = renderer.domElement;
       document.body.appendChild( renderer.domElement );
-
       scene.background = new THREE.Color(0xfeffa8);
       camera.position.set(0, 0, 5);
 
 
       // initialize a cube
-      var cube = new Cubelib.Hexahedron(4, Cubelib.HexahedronSVGCubelet);
-      var group = cube.groupT;
-      scene.add(group);
+      const cube = new Cubelib.Hexahedron(Cubelib.HexahedronSVGCubelet, 4);
+      cube.rotation.y -= 0.5
+      cube.rotation.x += 0.5
+      cube.scale.setScalar(0.7)
+      scene.add(cube);
+
       var animate = function () {
         requestAnimationFrame( animate );
 
-        // add some rotations
-        group.rotation.x += 0.03
-        group.rotation.y -= 0.03
-        group.rotation.z -= 0.03
+        // in case you want to add some rotations
+        // cube.rotation.x += 0.03
+        // cube.rotation.y -= 0.03
+        // cube.rotation.z -= 0.03
 
-        // remember to update
+        // remember to call update inside the loop
         cube.update()
 
         renderer.render( scene, camera );
@@ -60,24 +64,25 @@
 
       animate();
 
-      // prepare some orders
-      var order1 = {
-        face: 'R',
-        height: 2,
-        angle: Math.PI / 2
-      }
+      // use moveBuilder to create moves
+      const R = Cubelib.moveBuilder('R')
+      const U = Cubelib.moveBuilder('U')
 
-      var order2 = {
-        face: 'F',
-        height: 1,
-        angle: Math.PI
-      }
+      // adjust angles
+      const R2 = Cubelib.moveBuilder('R', 1, 2)
 
-      var order3 = {
-        face: 'R',
-        height: 1,
-        angle: Math.PI / 2
-      }
+      // double layer rotation
+      const r = Cubelib.moveBuilder('U', 2)
 
-      // add the orders with cube.enqueue(order)
+      // middle layer rotation on a 4x4x4 cube
+      const M = Cubelib.moveBuilder('U', 2, 1, 1)
+
+      // you can also use Cubelib.parser
+      // perform a PLL
+      const T_perm = "RUR'U' R'FR2U'R'U'RUR'F'"
+      const moves = Cubelib.parser(T_perm, 4)
+
+      // finally, use cube.enqueue to perfrom them
+      cube.enqueue(R)
+      cube.enqueue(moves)
     #+END_SRC

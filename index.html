@@ -7,65 +7,71 @@
 		 body { margin: 0; }
 		 canvas { display: block; }
 		</style>
-    <!-- <script src="node_modules/typescript-collections/dist/lib/umd.min.js"></script> -->
-		<!-- <script src="build/puzzling.iife.js"></script> -->
-    <!-- <srcipt type="module">
-         import * as THREE from "./node_modules/three/build/three.js"
-         </srcipt> -->
 	</head>
 	<body>
 		<script src="node_modules/three/build/three.js"></script>
 		<script src="build/cube-lib.js"></script>
 		<script>
-     var scene = new THREE.Scene();
-     var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-     var renderer = new THREE.WebGLRenderer(
-       { antialias: true }
-     );
-     renderer.setSize( window.innerWidth, window.innerHeight );
-     var canvas = renderer.domElement;
-     document.body.appendChild( renderer.domElement );
+      // let's roll!
 
-     scene.background = new THREE.Color(0xfeffa8);
-     camera.position.set(0, 0, 5);
-     /* scene.add(new THREE.AxesHelper(10)); */
+      // set up scenes
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+      var renderer = new THREE.WebGLRenderer(
+        { antialias: true }
+      );
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      var canvas = renderer.domElement;
+      document.body.appendChild( renderer.domElement );
+      scene.background = new THREE.Color(0xfeffa8);
+      camera.position.set(0, 0, 5);
 
 
-     var cube = new PUZZLING.Hexahedron(4, PUZZLING.HexahedronSVGCubelet);
-     var group = cube.groupT;
-     group.rotation.y -= 0.5
-     group.rotation.x += 0.5
-     group.scale.setScalar(0.7)
-     scene.add(group);
-     var animate = function () {
-			 requestAnimationFrame( animate );
+      // initialize a cube
+      const cube = new Cubelib.Hexahedron(Cubelib.HexahedronSVGCubelet, 4);
+      cube.rotation.y -= 0.5
+      cube.rotation.x += 0.5
+      cube.scale.setScalar(0.7)
+      scene.add(cube);
 
-       /* group.rotation.x += 0.03
-        * group.rotation.y -= 0.03
-        * group.rotation.z -= 0.03 */
-       cube.update()
-			 renderer.render( scene, camera );
-		 };
-     var order1 = {
-       face: 'R',
-       height: 2,
-       angle: Math.PI / 2
-     }
+      var animate = function () {
+        requestAnimationFrame( animate );
 
-     var order2 = {
-       face: 'F',
-       height: 1,
-       angle: Math.PI
-     }
+        // in case you want to add some rotations
+        // cube.rotation.x += 0.03
+        // cube.rotation.y -= 0.03
+        // cube.rotation.z -= 0.03
 
-     var order3 = {
-       face: 'R',
-       height: 1,
-       angle: Math.PI / 2
-     }
+        // remember to call update inside the loop
+        cube.update()
 
-		 animate();
+        renderer.render( scene, camera );
+      };
+
+      animate();
+
+      // use moveBuilder to create moves
+      const R = Cubelib.moveBuilder('R')
+      const U = Cubelib.moveBuilder('U')
+
+      // adjust angles
+      const R2 = Cubelib.moveBuilder('R', 1, 2)
+
+      // double layer rotation
+      const r = Cubelib.moveBuilder('U', 2)
+
+      // middle layer rotation on a 4x4x4 cube
+      const M = Cubelib.moveBuilder('U', 2, 1, 1)
+
+      // you can also use Cubelib.parser
+      // perform a PLL
+      const T_perm = "RUR'U' R'FR2U'R'U'RUR'F'"
+      const moves = Cubelib.parser(T_perm, 4)
+
+      // finally, use cube.enqueue to perfrom them
+      cube.enqueue(R)
+      cube.enqueue(moves)
 		</script>
 	</body>
 </html>

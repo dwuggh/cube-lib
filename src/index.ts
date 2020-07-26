@@ -1,4 +1,7 @@
-export { Hexahedron } from './cubes/Hexahedron'
+export { HexahedronCube } from './cubes/HexahedronCube'
 
-export { HexahedronSVGCubelet } from './cubes/Cubelets/HexahedronSVGCubelet'
+export * as Cubelet from './cubes/Cubelets/Cubelet'
 
+export { Move, moveBuilder } from './utils'
+
+export { parser } from './parser/parser'
