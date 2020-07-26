@@ -15,10 +15,13 @@ export interface Order {
   face: string
   /*
     the height defines how many layers will be rotate.
+    start is used when only middle layers are rotated
     Example:
-    in a 3x3x cube, '2R' order has height 2, same as 'r'. height > 3 should not be allowed.
+    in a 3x3x3 cube, '2R' order has height 2, same as 'r'. height > 3 should not be allowed.
+    'M' has start = 1, height = 1
     in a megaminx, height still can be 1, 2 or 3, by following conventions.
   */
+  start?: number
   height: number
   // the rotation angle due to the face. can be any real number.
   angle: number
