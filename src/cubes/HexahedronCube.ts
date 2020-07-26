@@ -1,7 +1,7 @@
 import * as THREE from 'three'
-import { Move, RotationProgress } from '../utils'
+import { Move } from '../utils'
 import { HexahedronBaseCubelet } from './Cubelets/HexahedronBaseCubelet'
-import { BaseCube } from './BaseCube'
+import { BaseCube, RotationProgress } from './BaseCube'
 
 
 const axisX = new THREE.Vector3(1, 0, 0)
@@ -40,6 +40,8 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
     if (Math.abs(this._rotationProgress.remainAngle) < anglePerFrame) {
       // in case the remaining angle is too small
       this._rotate(this._rotationProgress.group, this._rotationProgress.axis, this._rotationProgress.remainAngle)
+      // error correction
+      for (const cubelet of this.children) cubelet.round()
       // when finished, set current status to undefined (or null, whatever)
       this._rotationProgress = null
     } else {
@@ -56,15 +58,24 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
     }
   }
 
-  protected _setupRotationStatus(move: Move): RotationProgress<T> {
-
+  protected _setupRotationProgress(move: Move): RotationProgress<T> {
     const rotationGroup = new Array<T>()
     let axis: THREE.Vector3
+    let inf1 = 0
+    let sup1 = move.height
+    let inf2 = this.layer - move.height
+    let sup2 = this.layer
+    if (move.start != undefined) {
+      inf1 = move.start
+      sup1 = move.start + move.height
+      inf2 = this.layer - move.start - move.height
+      sup2 = this.layer - move.start
+    }
     switch (move.face) {
       case 'R':
         axis = axisX.clone().negate()
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(0, this.layer - move.height, this.layer)) {
+          if (cubelet.positionFilter(0, inf2, sup2)) {
             rotationGroup.push(cubelet)
           }
         }
@@ -72,7 +83,7 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
       case 'L':
         axis = axisX
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(0, 0, move.height)) {
+          if (cubelet.positionFilter(0, inf1, sup1)) {
             rotationGroup.push(cubelet)
           }
         }
@@ -80,7 +91,7 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
       case 'U':
         axis = axisY.clone().negate()
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(1, this.layer - move.height, this.layer)) {
+          if (cubelet.positionFilter(1, inf2, sup2)) {
             rotationGroup.push(cubelet)
           }
         }
@@ -88,7 +99,7 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
       case 'D':
         axis = axisY
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(1, 0, move.height)) {
+          if (cubelet.positionFilter(1, inf1, sup1)) {
             rotationGroup.push(cubelet)
           }
         }
@@ -96,7 +107,7 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
       case 'F':
         axis = axisZ.clone().negate()
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(2, this.layer - move.height, this.layer)) {
+          if (cubelet.positionFilter(2, inf2, sup2)) {
             rotationGroup.push(cubelet)
           }
         }
@@ -104,7 +115,7 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
       case 'B':
         axis = axisZ
         for (const cubelet of this.children) {
-          if (cubelet.positionFilter(2, 0, move.height)) {
+          if (cubelet.positionFilter(2, inf1, sup1)) {
             rotationGroup.push(cubelet)
           }
         }

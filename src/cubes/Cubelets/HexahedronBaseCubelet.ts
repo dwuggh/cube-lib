@@ -41,8 +41,16 @@ export class HexahedronBaseCubelet extends BaseCubelet {
     const pos = this.position.getComponent(index)
     // add error tolerence
     // FIXME maybe modify rotateOnCubeAxis is a better solution?
-    const err = 1E-8
-    const val = Math.floor(this.layer / 2) + pos                 // center position
-    return infimum - err <= val && val < supremum + err
+    // const err = 1E-6
+    const val = (this.layer - 1) / 2 + pos                 // center position
+    // return infimum - err <= val && val < supremum + err && val != supremum
+    return infimum <= val && val < supremum
+  }
+
+  public round(): THREE.Vector3 {
+    this.position.x = Math.round(this.position.x)
+    this.position.y = Math.round(this.position.y)
+    this.position.z = Math.round(this.position.z)
+    return this.position
   }
 }

@@ -1,6 +1,22 @@
 import * as THREE from 'three'
-import { Move, RotationProgress } from '../utils'
+import { Move } from '../utils'
 import { BaseCubelet } from './Cubelets/BaseCubelet'
+
+/*
+  RotationProgress store informations of the cube for the performing order.
+  Only used when performing an order.
+*/
+export interface RotationProgress<T extends BaseCubelet> {
+  move: Move,
+  // in most case, a rotation of a cube is focused on one axis.
+  // This may change due to some weird cubes.
+  axis: THREE.Vector3,
+  // how much work left to do. This value may not be percise, could have errors of 1E-10 and above.
+  remainAngle: number,
+  // the roation group. normally, the roation is an operation of groups.
+  // TODO Three.Group?
+  group: Array<T>
+}
 
 export abstract class BaseCube<T extends BaseCubelet> extends THREE.Group {
 
@@ -39,17 +55,17 @@ export abstract class BaseCube<T extends BaseCubelet> extends THREE.Group {
     Update the cube for one frame.
     This method should be called inside animation loop.
   */
-  public update(): void {
+  public update(): RotationProgress<T> {
     if (this._rotationProgress) {
-      this._perform()
+      return this._perform()
     } else {
       if (this.moves.length == 0) {
-        return
+        return null
       }
       else {
         // dequeue an move and setup some basic info
         const move = this.moves.shift()
-        this._setupRotationStatus(move)
+        return this._setupRotationProgress(move)
       }
     }
   }
@@ -64,7 +80,7 @@ export abstract class BaseCube<T extends BaseCubelet> extends THREE.Group {
     Axes must be cloned, or the origin value may be changed.
     Still, I need to specify six faces and handle them respectively. This should be the only repeat job.
   */
-  protected abstract _setupRotationStatus(move: Move): RotationProgress<T>
+  protected abstract _setupRotationProgress(move: Move): RotationProgress<T>
 
 
 }

@@ -32,7 +32,7 @@
      /* scene.add(new THREE.AxesHelper(10)); */
 
 
-     var cube = new Cubelib.HexahedronCube(Cubelib.HexahedronSVGCubelet, 4);
+     var cube = new Cubelib.HexahedronCube(Cubelib.Cubelet.HexahedronSVGCubelet, 3);
      cube.rotation.y -= 0.5
      cube.rotation.x += 0.5
      cube.scale.setScalar(0.7)
@@ -46,23 +46,6 @@
        cube.update()
 			 renderer.render( scene, camera );
 		 };
-     var move1 = {
-       face: 'R',
-       height: 2,
-       angle: Math.PI / 2
-     }
-
-     var move2 = {
-       face: 'F',
-       height: 1,
-       angle: Math.PI
-     }
-
-     var move3 = {
-       face: 'R',
-       height: 1,
-       angle: Math.PI / 2
-     }
 
 		 animate();
 		</script>

@@ -1,5 +1,3 @@
-import { BaseCubelet } from "./cubes/Cubelets/BaseCubelet"
-
 /*
   Move describes how a cube should rotate in the next few frames.
   The parser should parse the input streams into a Move stream.
@@ -27,18 +25,13 @@ export interface Move {
   angle: number
 }
 
-/*
-  RotationProgress store informations of the cube for the performing order.
-  Only used when performing an order.
- */
-export interface RotationProgress<T extends BaseCubelet> {
-  move: Move,
-  // in most case, a rotation of a cube is focused on one axis.
-  // This may change due to some weird cubes.
-  axis: THREE.Vector3,
-  // how much work left to do. This value may not be percise, could have errors of 1E-10 and above.
-  remainAngle: number,
-  // the roation group. normally, the roation is an operation of groups.
-  // TODO Three.Group?
-  group: Array<T>
+// a simple wrapper for moves to construct 1-step move
+export function moveBuilder(face: string, height = 1, angle = 1, start?: number): Move {
+  const move: Move = {
+    face: face,
+    height: height,
+    angle: angle * Math.PI / 2,
+  }
+  if (start != undefined) move.start = start
+  return move
 }
