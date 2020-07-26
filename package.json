@@ -5,14 +5,14 @@
   "author": "dwuggh",
   "main": "build/cube-lib.js",
   "module": "build/cube-lib.module.js",
-  "license": "GPL",
+  "license": "GPL-3.0-or-later",
   "private": false,
   "scripts": {
     "build": "rollup -c",
     "lint": "eslint . --ext .js, .ts",
     "start": "yarn run dev",
     "dev": "http-server . -p 8000",
-    "test": "ts-mocha -p test/test.tsconfig.json test/**/*.ts"
+    "test": "ts-mocha --require test/testNullCompiler.js -r jsdom-global/register -p test/test.tsconfig.json test/**/*.ts"
   },
   "files": [
     "build"
@@ -32,6 +32,8 @@
     "chai": "^4.2.0",
     "eslint": "^7.5.0",
     "http-server": "^0.12.3",
+    "jsdom": "^16.3.0",
+    "jsdom-global": "^3.0.2",
     "mocha": "^8.0.1",
     "rollup": "^2.22.2",
     "rollup-plugin-node-resolve": "^5.2.0",
