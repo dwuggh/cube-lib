@@ -11,7 +11,7 @@ import { moveBuilder } from '../src/utils'
 Mocha.describe('simple cube parser',
                () => {
                  it('handle faces correctly', () => {
-                   const input = "L U B d r x z"
+                   const input = "L U B d r x z M S"
                    const result = parser(input, 3)
                    const supposedResult = [
                      moveBuilder('L', 1, 1),
@@ -21,6 +21,8 @@ Mocha.describe('simple cube parser',
                      moveBuilder('R', 2, 1),
                      moveBuilder('R', 3, 1),
                      moveBuilder('F', 3, 1),
+                     moveBuilder('R', 1, 1, 1),
+                     moveBuilder('F', 1, 1, 1),
                    ]
                    expect(result).to.deep.equal(supposedResult)
                  })
@@ -64,7 +66,7 @@ Mocha.describe('simple cube parser',
                    expect(result).to.deep.equal(supposedResult)
                  })
                  it('parse T perm correctly', () => {
-                   const input = "RUR'U' R'FR2UR'U'RUR'F'"
+                   const input = "RUR'U' R'FR2U'R'U'RUR'F'"
                    const result = parser(input, 3)
                    const supposedResult = [
                      moveBuilder('R'),
@@ -74,7 +76,7 @@ Mocha.describe('simple cube parser',
                      moveBuilder('R', 1, -1),
                      moveBuilder('F'),
                      moveBuilder('R', 1, 2),
-                     moveBuilder('U'),
+                     moveBuilder('U', 1, -1),
                      moveBuilder('R', 1, -1),
                      moveBuilder('U', 1, -1),
                      moveBuilder('R'),
@@ -100,6 +102,21 @@ Mocha.describe('simple cube parser',
                      moveBuilder('F', 2),
                      moveBuilder('R', 1, -1),
                      moveBuilder('F', 2, -1),
+                   ]
+                   expect(result).to.deep.equal(supposedResult)
+                 })
+                 it('parse Ub perm(with S) correctly', () => {
+                   const input = "R2 UR2'SR2S'UR2'"
+                   const result = parser(input, 3)
+                   const supposedResult = [
+                     moveBuilder('R', 1, 2),
+                     moveBuilder('U'),
+                     moveBuilder('R', 1, -2),
+                     moveBuilder('F', 1, 1, 1),
+                     moveBuilder('R', 1, 2),
+                     moveBuilder('F', 1, -1, 1),
+                     moveBuilder('U'),
+                     moveBuilder('R', 1, -2)
                    ]
                    expect(result).to.deep.equal(supposedResult)
                  })

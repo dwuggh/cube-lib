@@ -32,7 +32,10 @@
      /* scene.add(new THREE.AxesHelper(10)); */
 
 
+     const input = "RUR'U' R'FR2U'R'U'RUR'F'"
+     const tperm = Cubelib.parser(input, 3)
      var cube = new Cubelib.HexahedronCube(Cubelib.Cubelet.HexahedronSVGCubelet, 3);
+     /* cube.enqueue(tperm) */
      cube.rotation.y -= 0.5
      cube.rotation.x += 0.5
      cube.scale.setScalar(0.7)

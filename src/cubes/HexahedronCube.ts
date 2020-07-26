@@ -36,13 +36,14 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
 
   protected _perform(): RotationProgress<T> {
     // control rotation speed, faster when there are too many orders
-    const anglePerFrame = this.moves.length >= 1 ? 1.0 : 0.38
-    if (Math.abs(this._rotationProgress.remainAngle) < anglePerFrame) {
+    let anglePerFrame = this.moves.length >= 1 ? 1.0 : 0.38
+    anglePerFrame = this._rotationProgress.remainAngle > 0 ? anglePerFrame : - anglePerFrame
+    if (Math.abs(this._rotationProgress.remainAngle) < Math.abs(anglePerFrame)) {
       // in case the remaining angle is too small
       this._rotate(this._rotationProgress.group, this._rotationProgress.axis, this._rotationProgress.remainAngle)
       // error correction
       for (const cubelet of this.children) cubelet.round()
-      // when finished, set current status to undefined (or null, whatever)
+      // when finished, set current status to null
       this._rotationProgress = null
     } else {
       this._rotate(this._rotationProgress.group, this._rotationProgress.axis, anglePerFrame)
@@ -130,5 +131,27 @@ export class HexahedronCube<T extends HexahedronBaseCubelet> extends BaseCube<T>
       group: rotationGroup,
     }
     return this._rotationProgress
+  }
+
+  /*
+    get current permutation
+    NOTE this do not contain whole information of this permutation group, but as a direct subgroup
+  */
+  public getPosPerm(): Array<T> {
+    const perm = new Array<T>()
+    for (let i = 0; i < this.layer; i++) {
+      for (let j = 0; j < this.layer; j++) {
+        for (let k = 0; k < this.layer; k++) {
+          for (const cubelet of this.children) {
+            const center = (this.layer - 1) / 2
+            const vec = new THREE.Vector3(i - center, j - center, k - center)
+            if (cubelet.position.equals(vec))
+              perm.push(cubelet)
+          }
+        }
+      }
+    }
+    if (perm.length != this.layer ** 3) throw new Error('cannot call getPosPerm when rotating')
+    return perm
   }
 }

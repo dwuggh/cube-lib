@@ -21,8 +21,6 @@ export interface RotationProgress<T extends BaseCubelet> {
 export abstract class BaseCube<T extends BaseCubelet> extends THREE.Group {
 
   // the moves queue waiting to be performed.
-  // for some reason, Collections and rollup conflicts. Array would just do the job.
-  // move: Collections.Queue<Move> = new Collections.Queue<Move>()
   moves: Array<Move> = new Array<Move>()
 
   // store rotationProgress when rotating. Should be null otherwise.
@@ -40,9 +38,23 @@ export abstract class BaseCube<T extends BaseCubelet> extends THREE.Group {
     Enqueue an move. The move may not be perform instantly.
     Should be used whenever the user wants to perform an move.
   */
-  public enqueue(move: Move): void {
-    this.moves.push(move)
+  public enqueue(move: Move | Array<Move>): Array<Move> {
+    if (move instanceof Array) {
+      for (const m of move) {
+        this.moves.push(m)
+      }
+    }
+    else {
+      this.moves.push(move)
+    }
+    return this.moves
   }
+
+  public dequeue(): Move {
+    if (this.moves.length == 0) return null
+    else return this.moves.shift()
+  }
+
 
   // restore the cube to initial state immadiately.
   public restore(): void {
@@ -65,15 +77,24 @@ export abstract class BaseCube<T extends BaseCubelet> extends THREE.Group {
       else {
         // dequeue an move and setup some basic info
         const move = this.moves.shift()
-        return this._setupRotationProgress(move)
+        this._setupRotationProgress(move)
+        return this._perform()
       }
     }
   }
+
+  // whether the cube is rotating, return this._rotationProgress if is rotating
+  // possible value: undefined, null or RotationProgress
+  public isDirty(): RotationProgress<T> {
+    return this._rotationProgress
+  }
+
   /*
     Perform an move by updating one frame.
     only used when this._status is not null.
   */
   protected abstract _perform(): RotationProgress<T>
+
   /*
     Mainly set up for rotation group.
     Use the cubelet's positionFilter function to do the job, since it would not affected by group scaling.

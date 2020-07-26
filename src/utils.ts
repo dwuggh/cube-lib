@@ -32,6 +32,6 @@ export function moveBuilder(face: string, height = 1, angle = 1, start?: number)
     height: height,
     angle: angle * Math.PI / 2,
   }
-  if (start != undefined) move.start = start
+  move.start = start ? start : 0
   return move
 }

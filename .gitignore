@@ -117,3 +117,8 @@ dist
 
 # seems like build should be ignored as well
 build
+
+# editors
+.vscode
+.idea
+.dir-locals.el

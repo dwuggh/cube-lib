@@ -6,7 +6,7 @@ const reg = / *(\d*)(\w)(w?)('\d*|\d+'|\d*) */
 
 function hexahedronParser(input: string, layer: number) {
   const regexResult = reg.exec(input)
-  if (regexResult == null) {
+  if (!regexResult) {
     throw new Error(`cannot match: ${input}`)
   }
   const _input = input.substr(regexResult[0].length)
@@ -18,6 +18,7 @@ function hexahedronParser(input: string, layer: number) {
   if (height > layer) throw new Error(`Height too large: ${height} is larger than layer ${layer} at ${input}`)
 
   let face: string = regexResult[2]
+  let start = 0
   switch(face) {
     case 'R': case 'L': case 'U': case 'D': case 'F': case 'B':
       break
@@ -40,6 +41,18 @@ function hexahedronParser(input: string, layer: number) {
       face = 'F'
       height = layer
       break
+    case 'M':
+      face = 'R'
+      start = 1
+      break
+    case 'E':
+      face = 'U'
+      start = 1
+      break
+    case 'S':
+      face = 'F'
+      start = 1
+      break
     default:
       throw new Error(`Unknown face: ${face} at ${input}`)
   }
@@ -50,6 +63,7 @@ function hexahedronParser(input: string, layer: number) {
     order: {
       face: face,
       height: height,
+      start: start,
       angle: angle
     }
   }

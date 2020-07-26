@@ -10,6 +10,35 @@ function getName(obj: THREE.Object3D): string {
   return obj.name
 }
 
+Mocha.describe('basic cube methods',
+               () => {
+                 const cube = new HexahedronCube(Cubelet.HexahedronSVGCubelet, 3)
+                 it('can enqueue one move', () => {
+                   const move: Move = moveBuilder('L')
+                   cube.enqueue(move)
+                   expect(cube.moves).to.deep.equal([move, ])
+                 })
+                 it('can enqueue multiple moves', () => {
+                   const moves = [
+                     moveBuilder('L'),
+                     moveBuilder('B'),
+                     moveBuilder('F'),
+                   ]
+                   cube.enqueue(moves)
+                   moves.unshift(moveBuilder('L'))
+                   expect(cube.moves).to.deep.equal(moves)
+                 })
+                 it('is not dirty before update', () => {
+                   console.log(cube.isDirty())
+                   expect(!!cube.isDirty()).to.equal(false)
+                 })
+                 it('is dirty after update', () => {
+                   cube.update()
+                   expect(!cube.isDirty()).to.equal(false)
+                 })
+               }
+              )
+
 Mocha.describe('hexahedron cube: setting up rotation',
                () => {
                  it('create right group of L', () => {

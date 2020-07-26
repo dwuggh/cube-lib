@@ -48,9 +48,6 @@ export class HexahedronBaseCubelet extends BaseCubelet {
   }
 
   public round(): THREE.Vector3 {
-    this.position.x = Math.round(this.position.x)
-    this.position.y = Math.round(this.position.y)
-    this.position.z = Math.round(this.position.z)
-    return this.position
+    return this.position.round()
   }
 }
